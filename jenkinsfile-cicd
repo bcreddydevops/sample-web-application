@@ -17,6 +17,13 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+	stage('sonarqube-analysis'){
+            steps{
+                withSonarQubeEnv(installationName: 'sonarqube-8', credentialsId: 'sonarqube-creds') {
+                 sh 'mvn sonar:sonar'
+                }
+            }
+        }
 		       
     }
 }

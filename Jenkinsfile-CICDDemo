@@ -35,6 +35,18 @@ pipeline{
                 sh 'mvn clean deploy'
             }
         }
+        stage('Deploy War file to Tommcat'){
+            steps{
+               sshagent(['tomcat-credentials']) {
+                  sh """
+                    scp -o StrictHostKeyChecking=no target/*.war ubuntu@18.209.248.175:/opt/tomcat-9/webapps
+                    ssh -o StrictHostKeyChecking=no ubuntu@18.209.248.175 /opt/tomcat-9/bin/shutdown.sh
+                    ssh -o StrictHostKeyChecking=no ubuntu@18.209.248.175 /opt/tomcat-9/bin/startup.sh
+					
+		          """          
+               }
+			}
+		}
         
      }
     post{
